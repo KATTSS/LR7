@@ -1,0 +1,1 @@
+/usr/bin/c++  -fsanitize=address,undefined CMakeFiles/main.dir/task5.cpp.o CMakeFiles/main.dir/input.cpp.o -o main 

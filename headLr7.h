@@ -21,4 +21,3 @@ void long_sum (std::string &s, std::string &s_temp);
 
 std::string vvodunsignedint(long long &x, int m);
 std::string transform(std::string &dec, std::string &base, std::string &numbers, long long baseinl);
-

@@ -1,9 +1,10 @@
 #include <iostream>
 #include <cmath>
+#include "input.cpp"
 #include "headLr7.h"
 
 int killer(int *&rab, int death);
-int analyzeResults(int *rabik);
+int killer(int del, int x, int bit);
 int findbochka(int *&rabik, int count);
 
 int main()
@@ -244,7 +245,7 @@ int main()
 
     //0 killed 
     if (count==0) {
-        l=212; rr=240;
+        l=211; rr=240;
         for (int bottle = 0; bottle <= 30; ++bottle)
         {
             if (bottle & (1 << 0))
@@ -270,11 +271,16 @@ int main()
         }
         int death=x-l;
         //std::cout << "death " << death << '\n';
-        rabik[0] = killer(rabs[0], death);
-        rabik[1] = killer(rabs[1], death);
-        rabik[2] = killer(rabs[2], death);
-        rabik[3] = killer(rabs[3], death);
-        rabik[4] = killer(rabs[4], death);
+        rabik[0] = 0;
+        rabik[1] = 0;
+        rabik[2] = 0;
+        rabik[3] = 0;
+        rabik[4] = 0;
+        rabik[0] = killer((rr - l + 1), x - l, 0);
+        rabik[1] = killer(rr - l + 1, x - l, 1);
+        rabik[2] = killer(rr - l + 1, x - l, 2);
+        rabik[3] = killer(rr - l + 1, x - l, 3);
+        rabik[4] = killer(rr - l + 1, x - l, 4);
         std::cout << "bochka: " << findbochka(rabik, 5)+l << '\n';
     }
 
@@ -311,10 +317,14 @@ int main()
         //std::cout << l << " " << rr << '\n';
         int death=x-l;
         //std::cout << "death " << death << '\n';
-        rabik[0] = killer(rabs[0], death);
-        rabik[1] = killer(rabs[1], death);
-        rabik[2] = killer(rabs[2], death);
-        rabik[3] = killer(rabs[3], death);
+        rabik[0] = 0;
+        rabik[1] = 0;
+        rabik[2] = 0;
+        rabik[3] = 0;
+        rabik[0] = killer((rr - l + 1), x - l, 0);
+        rabik[1] = killer(rr - l + 1, x - l, 1);
+        rabik[2] = killer(rr - l + 1, x - l, 2);
+        rabik[3] = killer(rr - l + 1, x - l, 3);
         int bochka = 0;
         // for (int j = 0; j < 4; ++j)
         // {
@@ -362,9 +372,12 @@ int main()
                 rabs[2][bottle] = bottle;
             }
         }
-        rabik[0] = killer(rabs[0], x - l);
-        rabik[1] = killer(rabs[1], x - l);
-        rabik[2] = killer(rabs[2], x - l);
+        rabik[0] = 0;
+        rabik[1] = 0;
+        rabik[2] = 0;
+        rabik[0] = killer((rr - l + 1), x - l, 0);
+        rabik[1] = killer(rr - l + 1, x - l, 1);
+        rabik[2] = killer(rr - l + 1, x - l, 2);
 
         std::cout << "bochka: " << findbochka(rabik, 5-count)+l << '\n';
 
@@ -410,9 +423,12 @@ int main()
             if (bottle & (1 << 1))
             {
                 rabs[1][bottle] = bottle;
-            }}
-        rabik[0] = killer(rabs[0], x - l);
-        rabik[1] = killer(rabs[1], x - l);
+            }
+        }
+        rabik[0] = 0;
+        rabik[1] = 0;
+        rabik[0] = killer((rr - l + 1), x - l, 0);
+        rabik[1] = killer(rr - l + 1, x - l, 1);
         std::cout << "bochka: " << findbochka(rabik, 5-count) << " "<< findbochka(rabik, 5-count) + l<< '\n';
     }
 
@@ -430,7 +446,7 @@ int main()
                 {
                     for (int i4 = i3 + 1; i4 < 5; i4++)
                     {
-                        if (!rabik[i1] && !rabik[i2] && !rabik[i3] && !rabik[i4])
+                        if (rabik[i1] && rabik[i2] && rabik[i3] && rabik[i4])
                         {
                             f = 0;
                             break;
@@ -442,9 +458,10 @@ int main()
             }
         }
         std::cout << "l " << l << " r " << rr << '\n';
-        rabik[0] = killer(rabs[0], x - l);
-        if (rabik[0]==1) std::cout << "bochka: " << l << '\n';
-    }
+        rabik[0] = 0;
+        rabik[0] = killer((rr - l + 1), x - l, 0);
+        if (rabik[0]==1) std::cout << "bochka: " << l  << '\n';
+    } else std::cout << "bochka: " << l+1  << '\n';
 
     for (int i = 0; i < numRabs; ++i)
     {
@@ -456,31 +473,20 @@ int main()
     return 0;
 }
 
-int killer(int *&rab, int death)
+
+int killer(int del, int x, int bit)
 {
-    for (int i = 0; i < 120; ++i)
+    for (int i = 0; i < del; ++i)
     {
-        if (rab[i] == death)
+        if((i & (1 << bit)))
         {
-            return 1; // Возвращаем 1, если найдено совпадение
+            if(x == i)
+                return 1;
         }
     }
-    return 0; // Возвращаем 0, если совпадений не найдено
+    return 0; 
 }
 
-int analyzeResults(int *rabik)
-{
-    int poisonedBottle = 0;
-    for (int i = 0; i < 3; ++i)
-    {
-        if (rabik[i] == 1)
-        {
-            poisonedBottle |= (1 << i);
-            std::cout << poisonedBottle;
-        }
-    }
-    return poisonedBottle;
-}
 
 int findbochka(int *&rabik, int count) {
      int bochka = 0;
@@ -493,4 +499,16 @@ int findbochka(int *&rabik, int count) {
             }
         }
        return bochka;
+}
+
+int killer(int *&rab, int death)
+{
+    for (int i = 0; i < 120; ++i)
+    {
+        if (rab[i] == death)
+        {
+            return 1; 
+        }
+    }
+    return 0;
 }
