@@ -8,7 +8,8 @@ int killer(int del, int x, int bit);
 int findbochka(int *&rabik, int count);
 
 int main()
-{   std::string s;
+{ 
+    std::string s;
     int x, i = 1;
     do {vvoddec(s);
     x=std::stoi(s);} while (x<=0 || x>240);
@@ -460,9 +461,8 @@ int main()
         std::cout << "l " << l << " r " << rr << '\n';
         rabik[0] = 0;
         rabik[0] = killer((rr - l + 1), x - l, 0);
-        if (rabik[0]==1) std::cout << "bochka: " << l  << '\n';
-    } else std::cout << "bochka: " << l+1  << '\n';
-
+        std::cout << "bochka: " << l+  findbochka(rabik, 5-count) << '\n';
+    }
     for (int i = 0; i < numRabs; ++i)
     {
         delete[] rabs[i];
