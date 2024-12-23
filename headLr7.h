@@ -19,5 +19,5 @@ void long_sum (std::string &s, std::string &s_temp);
 
 //task3
 
-std::string vvodunsignedint(long long &x);
-std::string to_new_base (std::string &dec, std::string &base, std::string &numbers);
+std::string vvodunsignedint(long long &x, int m);
+std::string transform(std::string &dec, std::string &base, std::string &numbers, long long baseinl);

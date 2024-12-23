@@ -276,15 +276,86 @@ void long_sum(std::string &s, std::string &s_temp)
     s = max;
 }
 
-std::string vvodunsignedint(long long &x)
+std::string vvodunsignedint(long long &x, int m)
 {
     std::string s;
     do
     {
-        std::cout << "vvedite osnovanie systemy schislenya:" << '\n';
+        if (m==1) std::cout << "vvedite osnovanie systemy schislenya:" << '\n';
+        if (m==2) std::cout << "otravite bochky: " << '\n';
         std::getline(std::cin, s);
-    } while (s.find_first_not_of("0123456789") != std::string::npos);
+    } while (s.find_first_not_of("0123456789") != std::string::npos || s=="1");
     x = s.length();
     return s;
+}
+std::string transform(std::string &dec, std::string &base, std::string &numbers, long long baseinl)
+{
+    long long basesize = base.length();
+    long long decsize = dec.length();
+    long long count = 0;
+    char minus = '0';
+    if (dec[0] == '-')
+    {
+        minus = '-';
+        dec.erase(0, 1);
+    }
+    std::string transformed, letterview;
+    if (decsize < basesize)
+    {
+        transformed = numbers[0] + (count + '0');
+    }
+    std::string chastnoye;
+    while (dec.length() > 0)
+    {
+        long long temp = 1;
+        while (temp != 0)
+        {
+            std::string s_temp = dec.substr(0, basesize);
+            temp = std::stol(s_temp);
+            if (temp <= baseinl && dec.length() > basesize)
+            {
+                s_temp = dec.substr(0, basesize + 1);
+                temp = std::stol(s_temp);
+            }
+            // std::cout << "s_temp on iteration: " << s_temp << '\n';
+            dec.erase(0, s_temp.length());
+            // std::cout << "dec after removing on iteration: " << dec << '\n';
+            s_temp = std::to_string((temp % baseinl)); // Остаток при делении конкретной части числа, который переходит в следующий шаг
+            int ostatok = temp % baseinl;
+            dec.insert(0, s_temp);
+            // std::cout << "new dec on iteration: " << dec << '\n';
+            // std::cout << "temp before del: " << temp << '\n';
+            temp /= baseinl;
+            // std::cout << "temp after del: " << temp << '\n';
+            if (temp == 0)
+            {
+                // std::cout << "ost: " << ostatok << '\n';
+                transformed.insert(0, s_temp); // Записываем последний остаток в итоговое трансформированное число
+                while (ostatok > numbers.length() - 1)
+                {
+                    letterview.insert(0, 1, numbers[numbers.length() - 1]);
+                    letterview.insert(1, 1, (count + '0'));
+                    ostatok -= numbers.length() - 1;
+                }
+                letterview.insert(0, 1, numbers[ostatok]);
+                letterview.insert(1, 1, (count + '0'));
+                ++count;
+                // std::cout << "letters: " << letterview << '\n';
+            }
+            else
+            {
+                chastnoye.append(std::to_string(temp)); // Записываем в частное результат целого деления (потом частное должно снова перейти в dec)
+                // std::cout << "chastnoye on iteration: " << chastnoye << '\n';
+            }
+        }
+        dec.erase(0);
+        dec.insert(0, chastnoye);
+        // std::cout << "\nnext etap for dec: " << dec << '\n' << '\n';
+        chastnoye.erase(0);
+    }
+    // std::cout << "letters equivalent: " << letterview << '\n';
+    if (minus == '-')
+        letterview.insert(0, 1, minus);
+    return letterview;
 }
 
